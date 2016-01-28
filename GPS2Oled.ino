@@ -173,6 +173,7 @@ void loop()
   else if (millis() - last > 5000)
   {
     Serial.println();
+    display.clearDisplay();
     if (gps.location.isValid())
     {
       static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
@@ -198,12 +199,11 @@ void loop()
       Serial.println(F("]"));
       
       
-      display.clearDisplay();
-      display.setCursor(0,80);
-      display.print("Distance to London:");
-      display.print(distanceToLondon/1000, 6);
-      display.println(F(" km"));
-      display.display();
+      display.setCursor(0,0);
+      display.print("Lat:");
+      display.print(gps.location.lat());
+      display.print("Lng:");
+      display.println(gps.location.lng());
     }
 
     Serial.print(F("DIAGS      Chars="));
@@ -218,14 +218,11 @@ void loop()
     if (gps.charsProcessed() < 10)
     {
       Serial.println(F("WARNING: No GPS data.  Check wiring."));
-      display.clearDisplay();
       display.setCursor(0,0);
       display.println(F("No GPS data"));
-      display.display();
     }else
     {
-      display.clearDisplay();
-      display.setCursor(0,0);
+      display.setCursor(0,10);
       display.print(F("DIAG Processed="));
       display.print(gps.charsProcessed());
       display.print(F(" Sentences-with-Fix="));
@@ -234,9 +231,8 @@ void loop()
       display.print(gps.failedChecksum());
       display.print(F(" Passed-checksum="));
       display.println(gps.passedChecksum());
-      display.display();
     }
-
+    display.display();
     last = millis();
     Serial.println();
   }
